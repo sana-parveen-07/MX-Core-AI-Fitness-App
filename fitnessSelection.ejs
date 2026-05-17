@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fitness Goals - MX.Core</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      text-align: center;
+      z-index: 10;
+      max-width: 800px;
+      width: 100%;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .result-box {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 25px 30px;
+      margin: 30px 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-box p {
+      font-size: 1.1rem;
+      margin: 8px 0;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .result-box strong {
+      color: #ff6b6b;
+      font-weight: 700;
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 35px 30px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      text-align: left;
+    }
+
+    .form-section {
+      margin-bottom: 35px;
+    }
+
+    .form-section:last-of-type {
+      margin-bottom: 25px;
+    }
+
+    .form-section > p {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.95);
+      text-align: center;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-box label {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-box label:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 107, 107, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-box label::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .form-box label:hover::before {
+      left: 100%;
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 15px;
+      cursor: pointer;
+      appearance: none;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 4px;
+      background: transparent;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    input[type="checkbox"]:checked {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      border-color: #ff6b6b;
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    input[type="checkbox"]:checked + span {
+      color: white;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      color: white;
+      padding: 18px 50px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 300px;
+      margin: 25px auto 0;
+      display: block;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+      background: linear-gradient(135deg, #ff5252 0%, #d63031 100%);
+    }
+
+    .btn:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    /* Floating particles animation */
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    .particle:nth-child(1) { top: 20%; left: 20%; width: 10px; height: 10px; animation-delay: 0s; }
+    .particle:nth-child(2) { top: 80%; left: 80%; width: 15px; height: 15px; animation-delay: 2s; }
+    .particle:nth-child(3) { top: 40%; left: 70%; width: 8px; height: 8px; animation-delay: 4s; }
+
+    /* Enhanced Mobile Responsiveness */
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+        padding: 10px;
+        min-height: 100vh;
+        align-items: flex-start;
+        padding-top: 40px;
+      }
+      
+      .container {
+        margin: 0;
+        padding: 30px 25px;
+        border-radius: 20px;
+        max-width: 100%;
+      }
+      
+      .logo {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        line-height: 1.1;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        padding: 0 10px;
+      }
+
+      .result-box {
+        padding: 20px 25px;
+        margin: 25px 0;
+      }
+
+      .result-box p {
+        font-size: 1rem;
+      }
+
+      .form-box {
+        padding: 25px 20px;
+      }
+
+      .form-section > p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+      }
+
+      .form-box label {
+        padding: 12px 16px;
+        margin-bottom: 10px;
+        font-size: 1rem;
+      }
+
+      .btn {
+        padding: 16px 40px;
+        font-size: 1.1rem;
+        max-width: 280px;
+        letter-spacing: 0.5px;
+        margin-top: 20px;
+      }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 480px) {
+      body {
+        padding: 15px 10px;
+        padding-top: 30px;
+      }
+      
+      .container {
+        padding: 25px 20px;
+        border-radius: 16px;
+      }
+      
+      .logo {
+        font-size: 2rem;
+        margin-bottom: 12px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+        margin-bottom: 25px;
+        padding: 0 5px;
+      }
+
+      .result-box {
+        padding: 18px 20px;
+        margin: 20px 0;
+      }
+
+      .form-box {
+        padding: 20px 15px;
+      }
+
+      .form-section > p {
+        font-size: 1rem;
+        margin-bottom: 18px;
+      }
+
+      .form-box label {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+      }
+
+      .btn {
+        padding: 14px 35px;
+        font-size: 1rem;
+        max-width: 100%;
+        margin-top: 15px;
+      }
+    }
+
+    /* Touch device optimizations */
+    @media (pointer: coarse) {
+      .btn {
+        min-height: 48px;
+      }
+      
+      .form-box label {
+        min-height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating particles -->
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+
+  <div class="container">
+    <div class="logo">🎯</div>
+    <h1>Step 3: Fitness Goals</h1>
+    <p class="subtitle">Define your fitness journey by selecting your focus areas and primary goals.</p>
+
+    <% if (typeof bmi !== 'undefined' && typeof status !== 'undefined') { %>
+      <div class="result-box">
+        <p><strong>Your BMI:</strong> <%= bmi %></p>
+        <p><strong>Status:</strong> <%= status %></p>
+      </div>
+    <% } %>
+
+    <form action="/submit-fitness-goals" method="POST" class="form-box">
+      <div class="form-section">
+        <p>Areas to Focus On:</p>
+        
+        <label><input type="checkbox" name="focus_areas" value="belly_fat"><span>🏃‍♀️ Belly Fat</span></label>
+        <label><input type="checkbox" name="focus_areas" value="thighs"><span>🦵 Thighs</span></label>
+        <label><input type="checkbox" name="focus_areas" value="arms"><span>💪 Arms</span></label>
+        <label><input type="checkbox" name="focus_areas" value="chest"><span>🫀 Chest</span></label>
+        <label><input type="checkbox" name="focus_areas" value="back"><span>🏋️‍♂️ Back</span></label>
+        <label><input type="checkbox" name="focus_areas" value="full_body"><span>🔥 Full Body</span></label>
+      </div>
+
+      <div class="form-section">
+        <p>Primary Fitness Goals:</p>
+        
+        <label><input type="checkbox" name="fitness_goals" value="weight_loss"><span>⚖️ Weight Loss</span></label>
+        <label><input type="checkbox" name="fitness_goals" value="muscle_gain"><span>💪 Muscle Gain</span></label>
+        <label><input type="checkbox" name="fitness_goals" value="maintain_health"><span>❤️ Maintain Health</span></label>
+        <label><input type="checkbox" name="fitness_goals" value="improve_endurance"><span>🏃‍♂️ Improve Endurance</span></label>
+        <label><input type="checkbox" name="fitness_goals" value="increase_strength"><span>🏋️‍♀️ Increase Strength</span></label>
+        <label><input type="checkbox" name="fitness_goals" value="flexibility"><span>🧘‍♀️ Improve Flexibility</span></label>
+      </div>
+
+      <button type="submit" class="btn">Create My Plan</button>
+    </form>
+  </div>
+
+  <script>
+    // Enhanced checkbox interactions
+    document.querySelectorAll('label').forEach(label => {
+      const checkbox = label.querySelector('input[type="checkbox"]');
+      
+      label.addEventListener('click', (e) => {
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+      });
+      
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          label.style.background = 'rgba(255, 107, 107, 0.2)';
+          label.style.borderColor = '#ff6b6b';
+          label.style.boxShadow = '0 0 0 2px rgba(255, 107, 107, 0.3)';
+        } else {
+          label.style.background = 'rgba(255, 255, 255, 0.05)';
+          label.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+          label.style.boxShadow = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
